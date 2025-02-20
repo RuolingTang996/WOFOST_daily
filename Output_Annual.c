@@ -6,25 +6,43 @@
 
 void header_AO(FILE *fp_ao)
 {
-    fprintf(fp_ao,"Lat,Lon,Year,Day,Storage,GrowthDay,N_Uptake,P_Uptake,N_grain,P_grain,N_residue,P_Residue\n");
+    fprintf(fp_ao,"Lat,Lon,Year,GrowthDay,DVS,TWRT,TWST,TWLV,TWSO,LAI,NUptake,PUptake,KUptake,NamountRT,NamountST,NamountLV,NamountSO,PamountRT,PamountST,PamountLV,PamountSO,KamountRT,KmaountST,KamountLV,KamountSO,OxygenStress,NutrientStress\n");
 }
 
 void Output_Annual(FILE *fp_ao)
 {      
          fprintf(fp_ao,"%7.2f\t%7.2f\t%4d\t%3d" // Lat, Lon, MeteoYear, MeteoDay
-                "\t%4.2f\t%4.2d" // Crop stage
-                "\t%4.2f\t%4.2f" //N,P uptake
-                "\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n",//N,P content in grains and residues
+                "\t%4.2d" // GrowthDay
+                "\t%4.2f" //DVS
+                "\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f"  // TWRT, TWST, TWLV, TWSO, LAI
+                "\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.2f" //Nutrient uptake
+                "\t%4.2f\t%4.2f\n", //stress factors
                Latitude[Lat],
                Longitude[Lon],
                MeteoYear[Day],
                MeteoDay[Day],
-               Crop->st.storage, // Crop yield
                Crop->GrowthDay,
+               Crop->st.Development,
+               Crop->st.roots,
+               Crop->st.stems,
+               Crop->st.leaves,
+               Crop->st.storage,
+               Crop->st.LAI,
                Crop->N_st.Uptake,
                Crop->P_st.Uptake,
-               Crop->N_st.storage,//For grains
-               Crop->P_st.storage,//For grains
-               Crop->st.leaves * Crop->prm.N_ResidualFrac_lv + Crop->st.stems * Crop->prm.N_ResidualFrac_st,
-               Crop->st.leaves * Crop->prm.P_ResidualFrac_lv + Crop->st.stems * Crop->prm.P_ResidualFrac_st);
+               Crop->K_st.Uptake,
+               Crop->N_st.roots,
+               Crop->N_st.stems,
+               Crop->N_st.leaves,
+               Crop->N_st.storage,
+               Crop->P_st.roots,
+               Crop->P_st.stems,
+               Crop->P_st.leaves,
+               Crop->P_st.storage,
+               Crop->K_st.roots,
+               Crop->K_st.stems,
+               Crop->K_st.leaves,
+               Crop->K_st.storage,
+               Crop->DaysOxygenStress,
+               Crop->NutrientStress);
 }

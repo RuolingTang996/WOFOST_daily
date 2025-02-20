@@ -9,6 +9,28 @@
 /*  daily temperature, day length and the vernalization                        */
 /*-----------------------------------------------------------------------------*/
 
+
+/*Part 1. 选择CROPTYPE*, 这来自claude老师*/
+
+
+void ProcessDevelopmentRate(int CropType) {
+    if (CropType < 0 || CropType > 2) {
+        printf("Error: Unsupported CropType %d\n", CropType);
+        return;
+    }
+
+    switch(CropType) {
+        case 0:
+        case 1:
+            DevelopmentRate();
+            break;
+        case 2:
+            DevelopmentRate_Cabbage();
+            break;
+    }
+}
+
+
 void DevelopmentRate(void)
 {
     float VernalizationFactor;
@@ -37,27 +59,8 @@ void DevelopmentRate(void)
 }
 
 //////////////////////////////////////以下是我最新的从chatgpt, deepseek, claude中发现的代码 【需要我自己一步步debug】///////////////////////////////////////////
-
-/*Part 1. 选择CROPTYPE*, 这来自claude老师*/
-
-void ProcessDevelopmentRate(int CropType) {
-    if (CropType < 0 || CropType > 2) {
-        printf("Error: Unsupported CropType %d\n", CropType);
-        return;
-    }
-
-    switch(CropType) {
-        case 0:
-        case 1:
-            DevelopmentRate();
-            break;
-        case 2:
-            DevelopmentRate_Cabbage();
-            break;
-    }
-}
-
 /*Part 2. 保持原来的development.c代码， 但是加上解释*/
+/*
 void DevelopmentRate(void)  // 定义 DevelopmentRate 函数
 {
     float VernalizationFactor;  // 定义春化因子 (VernalizationFactor)
@@ -98,9 +101,10 @@ void DevelopmentRate(void)  // 定义 DevelopmentRate 函数
         Crop->rt.Development = Afgen(Crop->prm.DeltaTempSum, &Temp) / Crop->prm.TempSum2;
     }
 }
-
+*/
 
 /*Part 3. 新的caabage的development的公式，疑似最新版*/
+
 void DevelopmentRate_Cabbage(void) 
 {
     float VernalizationFactor;

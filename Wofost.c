@@ -205,8 +205,8 @@ int main(int argc, char **argv)
                         // printf("Lon: %3d Lat: %3d TempSum1: %5.2f\n", Lon, Lat, Crop->prm.TempSum1);
                         
                         WatBal = Grid->soil;
-                        WatBal-> ct.MoistureFC = CN_FC[Lon][Lat];
-                        printf("Lon: %3d Lat: %3d MoistureFC: %5.2f\n", Lon, Lat, WatBal-> ct.MoistureFC);
+                        // WatBal-> ct.MoistureFC = CN_FC[Lon][Lat];
+                        // printf("Lon: %3d Lat: %3d MoistureFC: %5.2f\n", Lon, Lat, WatBal-> ct.MoistureFC);
 
                         Mng = Grid->mng;
                         Site = Grid->ste;

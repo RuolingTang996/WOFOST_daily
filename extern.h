@@ -46,6 +46,8 @@ extern void InitializeCrop();               // 初始化作物函数
 extern int EmergenceCrop(int Emergence);    // 作物出苗函数
 
 extern void DevelopmentRate();                                                                                              // 发育率函数
+extern void DevelopmentRate_Cabbage();                                                                                      // 大白菜发育率函数
+extern void ProcessDevelopmentRate();                                                                                       // 根据作物类型选择发育速率函数
 extern void LeaveGrowth();                                                                                                  // 叶片生长函数
 extern float DailyTotalAssimilation();                                                                                      // 每日总同化率函数
 extern float DyingLeaves();                                                                                                 // 枯萎叶片函数
