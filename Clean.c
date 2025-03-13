@@ -370,10 +370,15 @@ void CleanMeteo(Weather * Meteo)
         free(AngstA[j]);
         free(AngstB[j]);
         free(Altitude[j]);
-        free(HA[j]);
-        free(sow_a1[j]);
-        free(tsumEA[j]);
-        free(tsumAM[j]);
+        free(ncTest[j]);
+        free(TSUM1[j]);
+        free(TSUM2[j]);
+        free(CN_KSAT[j]);
+        free(CN_SAT[j]);
+        free(CN_FC[j]);
+        free(CN_PWP[j]);
+        free(gravel[j]);
+        free(CN_PAW[j]);
     }
     free(Tmin);
     free(Tmax);
@@ -385,8 +390,13 @@ void CleanMeteo(Weather * Meteo)
     free(AngstA);
     free(AngstB);
     free(Altitude);
-    free(HA);
-    free(sow_a1);
-    free(tsumEA);
-    free(tsumAM);
+    free(ncTest);
+    free(TSUM1);
+    free(TSUM2);
+    free(CN_KSAT);
+    free(CN_SAT);
+    free(CN_FC);
+    free(CN_PWP);
+    free(gravel);
+    free(CN_PAW);
 }

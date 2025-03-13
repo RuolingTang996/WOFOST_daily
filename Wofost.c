@@ -12,14 +12,18 @@ int main(int argc, char **argv)
 
     FILE **files_DO; // 声明一个指向FILE指针的指针，这%通常用于指向一个FILE指针数组，可以用来处理多个文件
     FILE **files_AO; // 声明一个指向FILE指针的指针，这%通常用于指向一个FILE指针数组，可以用来处理多个文件
+    FILE **files_CO; // 声明一个指向FILE指针的指针，这%通常用于指向一个FILE指针数组，可以用来处理多个文件
     FILE *fptr_DO;   // 声明一个指向FILE的指针，通常用于文件操作，如打开、读取、写入和关闭文件。
     FILE *fptr_AO;   // 声明一个指向FILE的指针，通常用于文件操作，如打开、读取、写入和关闭文件。
+    FILE *fptr_CO;   // 声明一个指向FILE的指针，通常用于文件操作，如打开、读取、写入和关闭文件。
 
     SimUnit *initial = NULL; // 声明一个指向SimUnit类型的指针并初始化为NULL，SimUnit可能是一个用户定义的数据类型。
     Weather *head;           // 声明一个指向Weather类型的指针，可能用于链表的头指针，用来存储天气数据。
     Green *wipe;             // 声明一个指向Green类型的指针，Green可能是一个用户定义的数据类型。
 
-    int CycleLength = 300; // 声明一个整型变量CycleLength并初始化为300，可能表示一个周期的长度。
+
+    // Yangtze: maize-150; wheat-250; rice-170; soybean-160
+    int CycleLength = 170; // 声明一个整型变量CycleLength并初始化为300，可能表示一个周期的长度。
     int NumberOfFiles;     // 声明一个整型变量NumberOfFiles，可能用来存储文件的数量。
     int Emergence;         // 声明一个整型变量Emergence，其具体用途不明。
     int i;                 // 声明一个整型变量i，通常用作循环计数。
@@ -30,6 +34,8 @@ int main(int argc, char **argv)
     char name_old_DO[MAX_STRING];  // 声明一个字符数组name_old，大小为MAX_STRING。
     char name_AO[MAX_STRING];      // 声明一个字符数组name，大小为MAX_STRING
     char name_old_AO[MAX_STRING];  // 声明一个字符数组name_old，大小为MAX_STRING。
+    char name_CO[MAX_STRING];      // 声明一个字符数组name，大小为MAX_STRING
+    char name_old_CO[MAX_STRING];  // 声明一个字符数组name_old，大小为MAX_STRING。
 
     Step = 1.; // 将Step变量赋值为1.0，Step的声明没有在这段代码中显示，可能在前面已经声明过。
 
@@ -61,6 +67,7 @@ int main(int argc, char **argv)
     /* Allocate memory for the file pointers */      /* 为文件指针分配内存 */
     files_DO = malloc(sizeof(**files_DO) * NumberOfFiles); // 分配足够存储NumberOfFiles个FILE指针的内存
     files_AO = malloc(sizeof(**files_AO) * NumberOfFiles); // 分配足够存储NumberOfFiles个FILE指针的内存
+    files_CO = malloc(sizeof(**files_CO) * NumberOfFiles); // 分配足够存储NumberOfFiles个FILE指针的内存
 
     /* Go back to the beginning of the list */ /* 返回列表的开始位置 */
     Grid = initial;
@@ -68,12 +75,16 @@ int main(int argc, char **argv)
     /* Open the output files */                            /* 打开输出文件 */
     memset(name_old_DO, '\0', MAX_STRING);                 // 将name_old数组初始化为全'\0'
     memset(name_old_AO, '\0', MAX_STRING);                 // 将name_old数组初始化为全'\0'
+    memset(name_old_CO, '\0', MAX_STRING);                 // 将name_old数组初始化为全'\0'
     while (Grid)                                           // 遍历Grid链表
     {                                                      /* Make valgrind happy  */
         memset(name_DO, '\0', MAX_STRING);                    // 将name数组初始化为全'\0'
         memset(name_AO, '\0', MAX_STRING);                    // 将name数组初始化为全'\0'
+        memset(name_CO, '\0', MAX_STRING);                    // 将name数组初始化为全'\0'
         strncpy(name_DO, Grid->output_daily, strlen(Grid->output_daily)); // 复制输出文件名到name数组中
         strncpy(name_AO, Grid->output_annual, strlen(Grid->output_annual)); // 复制输出文件名到name数组中
+        strncpy(name_CO, Grid->output_calendar, strlen(Grid->output_calendar)); // 复制输出文件名到name数组中
+
 
         if (strcmp(name_old_DO, name_DO) != 0) // 如果当前文件名与上一个不同
         {
@@ -121,6 +132,29 @@ int main(int argc, char **argv)
             }
         }
 
+        if (strcmp(name_old_CO, name_CO) != 0) // 如果当前文件名与上一个不同
+        {
+            // 打开新的文件并将文件指针存储在files数组中
+            files_CO[Grid->file_CO] = fptr_CO = fopen(name_CO, "w");
+            if (files_CO[Grid->file_CO] == NULL) // 如果文件打开失败
+            {
+                fprintf(stderr, "Cannot initialize output file %s.\n", name_CO); // 打印错误信息到标准错误
+                exit(0);                                                      // 退出程序
+            }
+            header_CO(files_CO[Grid->file_CO]); // 写文件头
+        }
+        else
+        {
+            // 如果当前文件名与上一个相同，则复用之前的文件指针
+            if (fptr_CO != NULL)
+                files_CO[Grid->file_CO] = fptr_CO;
+            else
+            {
+                fprintf(stderr, "Cannot initialize file pointer\n"); // 如果文件指针未初始化，打印错误信息
+                exit(0);                                             // 退出程序
+            }
+        }
+
         // allocate memory for the statistical analysis // 为统计分析分配内存
         for (i = 0; i <= Meteo->Seasons; i++)
         {
@@ -132,8 +166,10 @@ int main(int argc, char **argv)
         // 准备下一个输出文件名
         memset(name_old_DO, '\0', MAX_STRING);                    // 将name_old数组重置为全'\0'
         memset(name_old_AO, '\0', MAX_STRING);                    // 将name_old数组重置为全'\0'
+        memset(name_old_CO, '\0', MAX_STRING);                    // 将name_old数组重置为全'\0'
         strncpy(name_old_DO, Grid->output_daily, strlen(Grid->output_daily)); // 将当前输出文件名设置为下次循环的旧文件名
         strncpy(name_old_AO, Grid->output_annual, strlen(Grid->output_annual)); // 将当前输出文件名设置为下次循环的旧文件名
+        strncpy(name_old_CO, Grid->output_calendar, strlen(Grid->output_calendar)); // 将当前输出文件名设置为下次循环的旧文件名
 
         Grid->flag = 0;    // force end of simulations in endyear// 强制在结束年份结束模拟
         Grid = Grid->next; // 移动到链表的下一个元素
@@ -156,16 +192,21 @@ int main(int argc, char **argv)
         {
             for (Lat = 0; Lat < Meteo->nlat; Lat++)
             {
-                if (HA[Lon][Lat][0]>0)
-                {
+                // if (HA[Lon][Lat]<500.0 || sow_a1[Lon][Lat]<0.0 || tsumEA[Lon][Lat]<0.0 || tsumAM[Lon][Lat]<0.0) // Start the simulation if all variables have the value
+                if (isnan(ncTest[Lon][Lat])) 
+                {   
+                    // printf("Skippoiing NaN at Lon=%ld, Lat=%ld, %f, %f\n", Lon, Lat, Longitude[Lon], Latitude[Lat]);
                     continue;
                 }
 
-                // Go back to the beginning of the list and rest grid value flag,and twso and length
+                // printf("Index: %3ld %3ld  Geo: %8.4f %8.4f  TSUM: %5.2f %5.2f\n",
+                //     Lon, Lat, Longitude[Lon], Latitude[Lat], TSUM1[Lon][Lat], TSUM2[Lon][Lat]);
+
                 // 返回到列表的开始并重置Grid的标志、twso和length
-                Grid = initial;
-                while (Grid)
-                {
+                 Grid = initial;
+                
+                 while (Grid)
+                 {
                     Grid->flag = 0;
 
                     for (i = 0; i <= Meteo->Seasons; i++)
@@ -175,11 +216,12 @@ int main(int argc, char **argv)
                         Grid->crp->Seasons = 1;
                     }
                     Grid = Grid->next;
-                }
+                 }
+                               
 
-                for (Day = 0; Day < Meteo->ntime; Day++)
-                // assume that the series start January first // 假设系列从一月一日开始
-                {
+                 for (Day = 0; Day < Meteo->ntime; Day++)
+                 // assume that the series start January first // 假设系列从一月一日开始
+                 {
 
                     Grid = initial;
 
@@ -195,12 +237,24 @@ int main(int argc, char **argv)
                         /* put them in the place holders */
 
                         Crop = Grid->crp;
-                        // Rewrite the TempSum1 and TempSum2 with the data from the mask.nc file
-                        Crop->prm.TempSum1 = tsumEA[Lon][Lat][0];
-                        Crop->prm.TempSum2 = tsumAM[Lon][Lat][0];
+                        Crop->prm.TempSum1 = TSUM1[Lon][Lat];
+                        Crop->prm.TempSum2 = TSUM2[Lon][Lat];
+                        
+
+                        // printf("TSUM1[%ld][%ld] = %f\n", Lon, Lat, TSUM1[Lon][Lat]);
+                        // printf("TSUM2[%ld][%ld] = %f\n", Lon, Lat, TSUM2[Lon][Lat]);
                         WatBal = Grid->soil;
+                        WatBal-> ct.MoistureFC = CN_FC[Lon][Lat];
+                        WatBal-> ct.MoistureSAT = CN_SAT[Lon][Lat];
+                        WatBal-> ct.K0 = CN_KSAT[Lon][Lat];
+                        WatBal-> ct.MoistureWP  = CN_PWP[Lon][Lat];
+    
+
+
                         Mng = Grid->mng;
                         Site = Grid->ste;
+                        // Site-> InitSoilMoisture = CN_PAW[Lon][Lat];
+                        // Site-> NotInfiltrating = gravel[Lon][Lat];
 
                         Emergence = Grid->emergence; /* Start simulation at sowing or emergence */
 
@@ -264,13 +318,14 @@ int main(int argc, char **argv)
                                 }
                                 else
                                 {
-                                    /* Write to the output files: Seasonal scale */ /* 写入输出文件 */
-                                    Grid->twso[Crop->GrowthDay] = Crop->st.storage;
-                                    Grid->length[Crop->GrowthDay] = Crop->GrowthDay;
-                                    // if (Meteo->Seasons == Crop->Seasons)
-                                    // {
                                     Output_Annual(files_AO[Grid->file_AO]);
-                                    //}
+                                    /* Write to the output files: Seasonal scale */ /* 写入输出文件 */
+                                    Grid->twso[Crop->Seasons] = Crop->st.storage;
+                                    Grid->length[Crop->Seasons] = Crop->GrowthDay;
+                                    if (Meteo->Seasons == Crop->Seasons)
+                                    {
+                                        Output_Calendar(files_CO[Grid->file_CO]);
+                                    }
 
                                     /* Clean the LeaveProperties */ /* 清理LeaveProperties */
                                     while (Crop->LeaveProperties != NULL)
@@ -312,6 +367,7 @@ int main(int argc, char **argv)
     /* Close the output files and free the allocated memory */ /* 关闭输出文件并释放分配的内存 */
     fptr_DO = NULL;
     fptr_AO = NULL;
+    fptr_CO = NULL;
 
     while (Grid)
     {
@@ -329,6 +385,14 @@ int main(int argc, char **argv)
             {
                 fptr_AO = files_AO[Grid->file_AO];
                 fclose(files_AO[Grid->file_AO]); // 关闭文件指针
+            }
+        }
+        if (files_CO[Grid->file_CO] != fptr_CO)
+        {
+            if (Grid->file_CO < NumberOfFiles)
+            {
+                fptr_CO = files_CO[Grid->file_CO];
+                fclose(files_CO[Grid->file_CO]); // 关闭文件指针
             }
         }
         Grid = Grid->next;

@@ -14,7 +14,7 @@
 #define NR_VARIABLES_MANAGEMENT 9
 #define NR_TABLES_MANAGEMENT    4
 #define NUMBER_OF_TABLES        31
-#define MAX_STRING             2048
+#define MAX_STRING             3072   //2048
 #define METEO_LENGTH           36600 //max 100 years 
 #define DOMAIN_LENGTH          15000   //max 0.5 degree
 
@@ -409,10 +409,12 @@ typedef struct SIMUNIT {
         int emergence;
         int file_DO;
         int file_AO;
+        int file_CO;
         int flag;
         char start[MAX_STRING];
         char output_daily[MAX_STRING];
         char output_annual[MAX_STRING];
+        char output_calendar[MAX_STRING];
 
         /* Statistics */
         float twso[100000];
@@ -454,10 +456,15 @@ int MeteoDay[METEO_LENGTH];
 float CO2;
 double Longitude[DOMAIN_LENGTH], Latitude[DOMAIN_LENGTH];
 // --- I added these variables to the original crop mask.nc file ----
-float ***sow_a1; // Average sowing date: This will replace the sowing date
-float ***HA; // Average sowing date: This will replace the sowing date
-float ***tsumEA; // TSUM1
-float ***tsumAM; // TSUM2
+float **ncTest; // mask file cultivation area of chili pepper
+float **TSUM1; // crop parmaeter Tsum1
+float **TSUM2; // crop parameter Tsum2
+float **CN_KSAT; //  soil parameter K0
+float **CN_SAT; // soil parameter SM0
+float **CN_FC; // soil parameter SMFCF
+float **CN_PWP;// soil parameter SMW
+float **gravel;// site parameter WAV
+float **CN_PAW;// site parameter NOTINF
 // --------------------------------------------------------------------
 float **Altitude;
 float **AngstA;
