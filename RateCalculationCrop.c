@@ -45,5 +45,6 @@ void RateCalculationCrop()
     
     /* Development rate calculation */
     DevelopmentRate();
-    
+    DevelopmentRate();
+    ProcessDevelopmentRate();    
 }

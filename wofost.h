@@ -4,7 +4,7 @@
 #include <time.h>
 #include <math.h>
 
-#define NR_VARIABLES_CRP	66
+#define NR_VARIABLES_CRP	70
 #define NR_TABLES_CRP   	22
 #define NR_VARIABLES_SITE       12
 #define NR_TABLES_SITE          1
@@ -179,7 +179,11 @@ typedef struct PARAMETERS {
         float TCNT;   
         float TCPT;   
         float TCKT;   
-        float N_fixation; 
+        float N_fixation;
+        float N_UptakeRate_max;
+        float P_UptakeRate_max;
+        float K_UptakeRate_max;
+        int CropType;
         } Parameters;
 
 

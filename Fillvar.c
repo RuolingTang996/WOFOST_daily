@@ -106,6 +106,11 @@ void FillCropVariables(Plant *CROP, float *Variable)
     CROP->prm.TCPT                     = Variable[63];
     CROP->prm.TCKT                     = Variable[64];
     CROP->prm.N_fixation               = Variable[65];
+    CROP->prm.N_UptakeRate_max         = Variable[66];
+    CROP->prm.P_UptakeRate_max         = Variable[67];
+    CROP->prm.K_UptakeRate_max         = Variable[68];    
+    CROP->prm.CropType                 = Variable[69];
+
 
 
     for (i=0;i<=NR_VARIABLES_CRP;i++) 
