@@ -461,8 +461,8 @@ float CO2;
 double Longitude[DOMAIN_LENGTH], Latitude[DOMAIN_LENGTH];
 // --- I added these variables to the original crop mask.nc file ----
 float **ncTest; // mask file cultivation area of chili pepper
-float **TSUM1; // crop parmaeter Tsum1
-float **TSUM2; // crop parameter Tsum2
+// float **TSUM1; // crop parmaeter Tsum1
+// float **TSUM2; // crop parameter Tsum2
 float **CN_KSAT; //  soil parameter K0
 float **CN_SAT; // soil parameter SM0
 float **CN_FC; // soil parameter SMFCF

@@ -371,8 +371,8 @@ void CleanMeteo(Weather * Meteo)
         free(AngstB[j]);
         free(Altitude[j]);
         free(ncTest[j]);
-        free(TSUM1[j]);
-        free(TSUM2[j]);
+        // free(TSUM1[j]);
+        // free(TSUM2[j]);
         free(CN_KSAT[j]);
         free(CN_SAT[j]);
         free(CN_FC[j]);
@@ -391,8 +391,8 @@ void CleanMeteo(Weather * Meteo)
     free(AngstB);
     free(Altitude);
     free(ncTest);
-    free(TSUM1);
-    free(TSUM2);
+    // free(TSUM1);
+    // free(TSUM2);
     free(CN_KSAT);
     free(CN_SAT);
     free(CN_FC);

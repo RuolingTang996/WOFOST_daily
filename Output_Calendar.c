@@ -42,16 +42,16 @@ void Output_Calendar(FILE *fp_co)
         fprintf(fp_co, "%4.2f, %4.2f, %6d, %6.0f, %4.0f, %4.0f, %6.0f, %6.0f, %6.0f, %9.0f, %5.2f, %5.2f %5d\n", 
         Latitude[Lat], 
         Longitude[Lon], 
-        dekad,   //dekad sowing
-        lngth,
+        dekad,   //播种日期（旬）
+        lngth,    //平均生长季长度
         Crop->prm.TempSum1,
         Crop->prm.TempSum2,
-        ave,
-        adev,
-        sdev,
-        var,
-        skew,
-        curt,
-        Crop->Seasons);
+        ave,  // 平均值
+        adev, // 平均偏差
+        sdev, // 标准差
+        var, // 方差
+        skew, // 偏度
+        curt,  // 峰度
+        Crop->Seasons);  // 生长季数
     }
  }

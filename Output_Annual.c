@@ -6,26 +6,27 @@
 
 void header_AO(FILE *fp_ao)
 {
-    fprintf(fp_ao,"Lat,Lon,Year,Day,LAI,TWSO,TWLV,TWST,TWRT,GrowthDay,DVS_harvest,N_Uptake,P_Uptake,NamountSO,PamountSO\n");
+    fprintf(fp_ao,"Lat,Lon,Year,Day,GrowingDays,TSM1,TSM2,DVS,LAI,Nuptake,Puptake,Kuptake,TWST,TWRT,TWLV,TWSO\n");
 }
 
 void Output_Annual(FILE *fp_ao)
 {      
-         fprintf(fp_ao,"%7.2f, %7.2f, %4d, %3d , %4.2f, %4.2f, %4.2f, %4.2f, %4.2f, %4.2d, %4.2f, %4.2f, %4.2f, %4.2f, %4.2f\n",
+         fprintf(fp_ao,"%7.2f, %7.2f, %4d, %3d, %3d, %4.2f, %4.2f, %4.2f, %4.2f, %4.2f, %4.2f, %4.2f, %4.2f, %4.2f, %4.2f, %4.2f\n",
                Latitude[Lat],
                Longitude[Lon],
                MeteoYear[Day],
                MeteoDay[Day],
-               Crop->st.LAI,
-               Crop->st.storage, // Crop yield
-               Crop->st.leaves,
-               Crop->st.stems,
-               Crop->st.roots,
                Crop->GrowthDay,
-               Crop->prm.DevelopStageHarvest,
+               Crop->prm.TempSum1,
+               Crop->prm.TempSum2,
+               Crop->st.Development,
+               Crop->st.LAI,
                Crop->N_st.Uptake,
                Crop->P_st.Uptake,
-               Crop->N_st.storage,//For grains
-               Crop->P_st.storage//For grains
+               Crop->K_st.Uptake,
+               Crop->st.stems,
+               Crop->st.roots,
+               Crop->st.leaves,
+               Crop->st.storage // Crop yield
             );
 }
